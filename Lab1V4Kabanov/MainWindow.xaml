@@ -1,0 +1,60 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab1V4Kabanov"
+        xmlns:ClassLibrary1="clr-namespace:ClassLibrary1;assembly=ClassLibrary1" x:Name="window" x:Class="Lab1V4Kabanov.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1200" Loaded="Window_Loaded" Closed="Window_Closed" >
+    <Window.Resources>
+        <CollectionViewSource  Source="{Binding}" x:Key="listDataCollection" Filter="FilterDataCollection"/>
+        <CollectionViewSource  Source="{Binding}" x:Key="listDataOnGrid" Filter="FilterDataOnGrid"/>
+        <local:ConverterCoord x:Key="ConverterCoordk"/>
+        <local:ConverterCompl x:Key="ConverterComplk"/>
+        <local:ConverterMaxMin x:Key="ConverterMaxMink"/>
+        <DataTemplate x:Key="Template">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding Converter={StaticResource ConverterCoordk}}" HorizontalAlignment="Left"/>
+                <TextBlock Text="{Binding Converter={StaticResource ConverterComplk}}" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="ListBox" Margin="10,150,10,15" ItemsSource="{Binding}" />
+        <Menu Margin="10,5,10,0" Height="38" VerticalAlignment="Top" >
+            <MenuItem  Header="File">
+                <MenuItem Header="New" Click="FileNew"/>
+                <MenuItem Header="Open" Click="COpen" />
+                <MenuItem Header="Save" Click="CSave"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Add Defaults" Click="CAddDefaults"/>
+                <MenuItem Header="Add Default V4DataCollection" Click="CAddDefaultV4DataCollection"/>
+                <MenuItem Header="Add Default V4DataOnGrid" Click="CAddDefaultV4DataOnGrid"/>
+                <MenuItem Header="Add Element from File" Click="CAddElementfromFile"/>
+                <MenuItem Header="Remove" Click="CRemove"/>
+            </MenuItem>
+        </Menu>
+        <ListBox x:Name="ListBoxDataColl" Margin="10,150,10,15" Grid.Column="1" ItemsSource="{Binding Source={StaticResource listDataCollection}}" />
+        <ListBox x:Name="ListBoxDataOnGrid" Margin="10,150,10,15" Grid.Column="2"  ItemsSource="{Binding Source={StaticResource listDataOnGrid}}"/>
+        <TextBlock x:Name="TextBlock" Grid.Column="3" HorizontalAlignment="Center" Margin="0,111,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding SelectedItem, Converter={StaticResource ConverterMaxMink}, ElementName=ListBoxDataOnGrid}" Width="200" Height="217"/>
+        <ListBox x:Name="ListBoxDetails"   Margin="10,70,0,0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SelectedItem, ElementName=ListBoxDataColl}" ItemTemplate="{StaticResource Template}" HorizontalAlignment="Left" Width="280" Height="111" VerticalAlignment="Top"/>
+        <Label Content="V4DataCollection" Margin="0,0,0,350" FontSize="20" HorizontalAlignment="Center" Grid.Column="1" Height="74" VerticalAlignment="Center"/>
+        <Label Content="V4DataOnGrid" Margin="84,62,0,456" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2"/>
+        <Label Content="TextBoxGrid" Margin="0,13,0,492" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3"/>
+        <Label Content="DetailsCollection" Margin="0,14,0,144" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"/>
+        <Label Content="V4MainCollection" Margin="65,66,0,459" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+    </Grid>
+
+</Window>
