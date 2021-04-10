@@ -236,7 +236,7 @@ namespace ClassLibrary1
         
         public void Add(V4Data item)
         {
-            IfChangedCollection = true;
+            //IfChangedCollection = true;
             item.PropertyChanged += PropertyC;
             list.Add(item);          
             num++;
@@ -246,7 +246,7 @@ namespace ClassLibrary1
         }
         public bool Remove(string id, double w)
         {
-            IfChangedCollection = true;
+            //IfChangedCollection = true;
             bool flag = false;
             for (int i = list.Count - 1; i >= 0; i--)
             {
@@ -266,7 +266,7 @@ namespace ClassLibrary1
         }
         public void AddDefaults()
         {
-            IfChangedCollection = true;
+            //IfChangedCollection = true;
             Random rand = new Random();
             int nItems = 4;
             double minValue = 0.0;
