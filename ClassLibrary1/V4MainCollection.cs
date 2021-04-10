@@ -241,7 +241,7 @@ namespace ClassLibrary1
             list.Add(item);          
             num++;
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Tmax"));
+            
             OnDataChanged(this, new DataChangedEventArgs(ChangeInfo.Add, num));
         }
         public bool Remove(string id, double w)
