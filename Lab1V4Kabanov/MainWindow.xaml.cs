@@ -16,7 +16,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-
 namespace Lab1V4Kabanov
 {
     /// <summary>
@@ -24,12 +23,12 @@ namespace Lab1V4Kabanov
     /// </summary>
     public partial class MainWindow : Window
     {
-        private void OnCollectionChange(object sender, NotifyCollectionChangedEventArgs args)
-        {
-            DataContext = null;
-            DataContext = V4MC;
-            //MessageBox.Show(DataContext.ToString());
-        }
+        //private void OnCollectionChange(object sender, NotifyCollectionChangedEventArgs args)
+        //{
+        //    DataContext = null;
+        //    DataContext = V4MC;
+        //    //MessageBox.Show(DataContext.ToString());
+        //}
 
         private V4MainCollection V4MC;
 
@@ -41,7 +40,7 @@ namespace Lab1V4Kabanov
         public MainWindow()
         {
             InitializeComponent();
-            
+            DataContext = V4MC;
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -53,16 +52,16 @@ namespace Lab1V4Kabanov
             if (ISaved())
                 MessageBox.Show("closed");
         }
-        private void ChangeV4MC(V4MainCollection subj,bool fl=false)
-        {
-            if (V4MC != null)
-                V4MC.CollectionChanged -= OnCollectionChange;
-            subj.CollectionChanged += OnCollectionChange;
-            V4MC = subj;
-            if (fl)
-                V4MC.IfChangedCollection = true;
-            OnCollectionChange(this, null);             
-        }
+        //private void ChangeV4MC(V4MainCollection subj,bool fl=false)
+        //{
+        //    if (V4MC != null)
+        //        V4MC.CollectionChanged -= OnCollectionChange;
+        //    subj.CollectionChanged += OnCollectionChange;
+        //    V4MC = subj;
+        //    if (fl)
+        //        V4MC.IfChangedCollection = true;
+        //    OnCollectionChange(this, null);             
+        //}
         private bool ISaved()
         {
             if (V4MC == null)
@@ -99,7 +98,9 @@ namespace Lab1V4Kabanov
         {
             if (ISaved())
             {
-                ChangeV4MC(new V4MainCollection());
+                //            ChangeV4MC(new V4MainCollection());
+                V4MC = new V4MainCollection();
+                DataContext = V4MC;
                 //V4MC = new V4MainCollection();
                 //V4MC.IfChangedCollection = true;
             }
@@ -117,9 +118,9 @@ namespace Lab1V4Kabanov
                     Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
                     if (dlg.ShowDialog() == true)
                     {
-                        ChangeV4MC(new V4MainCollection());
+                        //            ChangeV4MC(new V4MainCollection());
                         V4MC.Load(dlg.FileName);
-                        ChangeV4MC(V4MC);
+                        //            ChangeV4MC(V4MC);
 
                     }
                 }
@@ -164,7 +165,6 @@ namespace Lab1V4Kabanov
                 try
                 {
                     V4MC.AddDefaults();
-                    ChangeV4MC(V4MC, true);
                 }
                 catch (Exception ex)
                 {
@@ -180,11 +180,7 @@ namespace Lab1V4Kabanov
             {
                 try
                 {
-                    var rand = new Random();
-                    V4DataCollection NElement = new V4DataCollection("new_v4col", 3.14);
-                    NElement.InitRandom(4, (float)5.0, (float)5.0, 1.0, 10.0, rand);
-                    V4MC.Add(NElement);
-                    ChangeV4MC(V4MC, true);
+                    V4MC.AddExtrColl();
                 }
                 catch (Exception ex)
                 {
@@ -202,12 +198,8 @@ namespace Lab1V4Kabanov
             {
                 try
                 {   
-                    var rand = new Random();
-                    V4DataOnGrid NElement = new V4DataOnGrid("new_v4grid", 2.71, new Grid2D((float)5.0, (float)5.0, 4, 4));
-                    NElement.InitRandom(1, 7, rand);
-                    V4MC.Add(NElement);
-                    ChangeV4MC(V4MC, true);
-                 
+ 
+                    V4MC.AddExtrGrid();
                 }
                 catch (Exception ex)
                 {
@@ -230,7 +222,7 @@ namespace Lab1V4Kabanov
                     {
                         V4DataOnGrid V4MCF = new V4DataOnGrid(dlg.FileName);
                         V4MC.Add(V4MCF);
-                        ChangeV4MC(V4MC, true);
+                        
                     }
                     catch (Exception ex)
                     {
@@ -248,7 +240,7 @@ namespace Lab1V4Kabanov
                 {
                     V4Data Selected = (V4Data)ListBox.SelectedItem;
                     V4MC.Remove(Selected.CInfo, Selected.CFrequency);
-                    ChangeV4MC(V4MC, true);
+                    //            ChangeV4MC(V4MC, true);
 
                 }
                 catch (Exception ex)
@@ -264,7 +256,12 @@ namespace Lab1V4Kabanov
 
         }
 
-        
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(V4MC.MaxMagnitude.ToString());
+        }
+
+
 
         /*private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

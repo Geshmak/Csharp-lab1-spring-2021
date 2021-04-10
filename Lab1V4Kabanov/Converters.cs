@@ -34,6 +34,19 @@ namespace Lab1V4Kabanov
             return value;
         }
     }
+    public class ConverterMMagn : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((V4MainCollection)value).MaxMagnitude;
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
 
     public class ConverterMaxMin : IValueConverter
     {
