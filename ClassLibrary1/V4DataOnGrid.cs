@@ -116,10 +116,11 @@ namespace ClassLibrary1
                     }
                 }
             }
-            catch (Exception ex)
+            /*catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-            }
+                
+            }*/
             finally
             {
                 if (fs != null)
