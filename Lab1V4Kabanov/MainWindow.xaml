@@ -13,7 +13,8 @@
         <local:ConverterCoord x:Key="ConverterCoordk"/>
         <local:ConverterCompl x:Key="ConverterComplk"/>
         <local:ConverterMaxMin x:Key="ConverterMaxMink"/>
-        <ClassLibrary1:V4MainCollection x:Key="ConverterMMagnk"/>
+        
+
         <DataTemplate x:Key="Template">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Converter={StaticResource ConverterCoordk}}" HorizontalAlignment="Left"/>
@@ -32,12 +33,13 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="ListBox" Margin="10,150,10,15" ItemsSource="{Binding}" />
+        <ListBox x:Name="ListBox" Margin="10,150,10,15" ItemsSource="{Binding }" />
         <Menu Margin="10,5,10,0" Height="38" VerticalAlignment="Top" >
             <MenuItem  Header="File">
                 <MenuItem Header="New" Click="FileNew"/>
                 <MenuItem Header="Open" Click="COpen" />
                 <MenuItem Header="Save" Click="CSave"/>
+
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Add Defaults" Click="CAddDefaults"/>
@@ -45,6 +47,16 @@
                 <MenuItem Header="Add Default V4DataOnGrid" Click="CAddDefaultV4DataOnGrid"/>
                 <MenuItem Header="Add Element from File" Click="CAddElementfromFile"/>
                 <MenuItem Header="Remove" Click="CRemove"/>
+
+            </MenuItem>
+            <MenuItem Header="Add Custom V4DataCollection" Click="AddCustomV4DCClick">
+
+            </MenuItem>
+            <MenuItem Header="ToolBar">
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Save"/>
+                <MenuItem Header="Add Custom"/>
+                <MenuItem Header="Remove"/>
             </MenuItem>
         </Menu>
         <ListBox x:Name="ListBoxDataColl" Margin="10,150,10,15" Grid.Column="1" ItemsSource="{Binding Source={StaticResource listDataCollection}}" />
@@ -59,8 +71,13 @@
 
         <TextBlock x:Name="TextBlockmagn" HorizontalAlignment="Center" Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Top" Height="80" Width="264" Text="{Binding Path = MaxMagnF }" Margin="0,76,0,0"/>
         <TextBlock x:Name="TextBlock" Grid.Column="3" HorizontalAlignment="Center" Margin="0,111,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding SelectedItem, Converter={StaticResource ConverterMaxMink}, ElementName=ListBoxDataOnGrid}" Width="200" Height="217"/>
-        <Button Content="Button" Grid.Column="2" HorizontalAlignment="Left" Margin="168,110,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Button_Click"/>
         <Label Content="Max Magnitude from V4MC" Margin="0,21,0,0" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Center" Margin="0,16,0,0" Grid.Row="1" Text="{Binding Info, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" Height="36"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Center" Margin="0,73,0,0" Grid.Row="1" Text="{Binding NItems, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Height="36"/>
+        <TextBox Grid.Column="3" HorizontalAlignment="Left" Margin="18,19,0,0" Grid.Row="1" Text="{Binding MaxValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="261" Height="36"/>
+        <TextBox Grid.Column="3" HorizontalAlignment="Center" Margin="0,73,0,0" Grid.Row="1" Text="{Binding MinValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Height="36"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Left" Margin="22,126,0,0" Grid.Row="1" Text="{Binding Frequency, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Height="36"/>
+
     </Grid>
 
 </Window>
