@@ -7,13 +7,29 @@
         xmlns:ClassLibrary1="clr-namespace:ClassLibrary1;assembly=ClassLibrary1" x:Name="window" x:Class="Lab1V4Kabanov.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1200" Loaded="Window_Loaded" Closed="Window_Closed" >
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" 
+                        Executed="OpenCommandHandler"/>
+
+        <CommandBinding Command="ApplicationCommands.Save" 
+                        Executed="SaveCommandHandler" 
+                        CanExecute="CanSaveCommandHandler"/>
+
+        <CommandBinding Command="ApplicationCommands.Delete" 
+                        Executed="DeleteCommandHandler" 
+                        CanExecute="CanDeleteCommandHandler"/>
+        <CommandBinding Command="{x:Static local:MainWindow.Custom}"
+                    Executed="CustomCommandHandler"
+                    CanExecute="CanCustomCommandHandler"/>
+    </Window.CommandBindings>
     <Window.Resources>
         <CollectionViewSource  Source="{Binding}" x:Key="listDataCollection" Filter="FilterDataCollection"/>
         <CollectionViewSource  Source="{Binding}" x:Key="listDataOnGrid" Filter="FilterDataOnGrid"/>
         <local:ConverterCoord x:Key="ConverterCoordk"/>
         <local:ConverterCompl x:Key="ConverterComplk"/>
         <local:ConverterMaxMin x:Key="ConverterMaxMink"/>
-        <ClassLibrary1:V4MainCollection x:Key="ConverterMMagnk"/>
+
+
         <DataTemplate x:Key="Template">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Converter={StaticResource ConverterCoordk}}" HorizontalAlignment="Left"/>
@@ -29,38 +45,60 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="ListBox" Margin="10,150,10,15" ItemsSource="{Binding}" />
+        <ListBox x:Name="ListBox" Margin="10,150,10,15" ItemsSource="{Binding }" />
         <Menu Margin="10,5,10,0" Height="38" VerticalAlignment="Top" >
             <MenuItem  Header="File">
                 <MenuItem Header="New" Click="FileNew"/>
-                <MenuItem Header="Open" Click="COpen" />
-                <MenuItem Header="Save" Click="CSave"/>
+                <MenuItem Header="Open" Command="ApplicationCommands.Open"/>
+                <MenuItem Header="Save"  Command="ApplicationCommands.Save"/>
+
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Add Defaults" Click="CAddDefaults"/>
                 <MenuItem Header="Add Default V4DataCollection" Click="CAddDefaultV4DataCollection"/>
                 <MenuItem Header="Add Default V4DataOnGrid" Click="CAddDefaultV4DataOnGrid"/>
                 <MenuItem Header="Add Element from File" Click="CAddElementfromFile"/>
-                <MenuItem Header="Remove" Click="CRemove"/>
+                <MenuItem Header="Remove"  Command="ApplicationCommands.Delete"/>
+
             </MenuItem>
+
+
         </Menu>
         <ListBox x:Name="ListBoxDataColl" Margin="10,150,10,15" Grid.Column="1" ItemsSource="{Binding Source={StaticResource listDataCollection}}" />
-        <ListBox x:Name="ListBoxDataOnGrid" Margin="10,150,10,15" Grid.Column="2"  ItemsSource="{Binding Source={StaticResource listDataOnGrid}}"/>
+        <ListBox x:Name="ListBoxDataOnGrid" Margin="10,150,331,15" Grid.Column="2"  ItemsSource="{Binding Source={StaticResource listDataOnGrid}}"/>
 
         <ListBox x:Name="ListBoxDetails"   Margin="10,70,0,0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding SelectedItem, ElementName=ListBoxDataColl}" ItemTemplate="{StaticResource Template}" HorizontalAlignment="Left" Width="280" Height="111" VerticalAlignment="Top"/>
         <Label Content="V4DataCollection" Margin="0,0,0,350" FontSize="20" HorizontalAlignment="Center" Grid.Column="1" Height="74" VerticalAlignment="Center"/>
         <Label Content="V4DataOnGrid" Margin="84,62,0,456" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2"/>
-        <Label Content="TextBoxGrid" Margin="0,13,0,492" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3"/>
+        <Label Content="TextBoxGrid" Margin="385,81,0,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="2"/>
         <Label Content="DetailsCollection" Margin="0,14,0,144" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"/>
         <Label Content="V4MainCollection" Margin="65,66,0,459" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
         <TextBlock x:Name="TextBlockmagn" HorizontalAlignment="Center" Grid.Row="1"  TextWrapping="Wrap" VerticalAlignment="Top" Height="80" Width="264" Text="{Binding Path = MaxMagnF }" Margin="0,76,0,0"/>
-        <TextBlock x:Name="TextBlock" Grid.Column="3" HorizontalAlignment="Center" Margin="0,111,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding SelectedItem, Converter={StaticResource ConverterMaxMink}, ElementName=ListBoxDataOnGrid}" Width="200" Height="217"/>
-        <Button Content="Button" Grid.Column="2" HorizontalAlignment="Left" Margin="168,110,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Button_Click"/>
+        <TextBlock x:Name="TextBlock" Grid.Column="2" HorizontalAlignment="Left" Margin="346,135,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding SelectedItem, Converter={StaticResource ConverterMaxMink}, ElementName=ListBoxDataOnGrid}" Width="200" Height="217"/>
         <Label Content="Max Magnitude from V4MC" Margin="0,21,0,0" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1"/>
+        <Grid Grid.Column="2" Grid.Row="1" x:Name="Test">
+            <TextBox x:Name="TBInfo" HorizontalAlignment="Left" Margin="32,24,0,0" Text="{Binding Info, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="260" Height="36"/>
+            <TextBox x:Name="TBItem" HorizontalAlignment="Left" Margin="31,90,0,0" Text="{Binding NItems, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Height="36"/>
+            <TextBox x:Name="TBMaxV" HorizontalAlignment="Left" Margin="322,57,0,0" Text="{Binding MaxValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Height="36"/>
+            <TextBox x:Name="TBMinV" HorizontalAlignment="Left" Margin="323,128,0,0" Text="{Binding MinValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Height="36"/>
+            <TextBox x:Name="TBFreq" HorizontalAlignment="Left" Margin="30,155,0,0" Text="{Binding Frequency, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" TextWrapping="Wrap" VerticalAlignment="Top" Width="262" Height="36"/>
+            <Label Content="Info" Margin="133,-8,0,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label Content="Number of items" Margin="79,58,0,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label Content="Frequency" Margin="110,124,0,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label Content="MaxValue" Margin="406,18,0,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label Content="MinValue" Margin="408,92,0,0" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </Grid>
+        <ToolBar Grid.Column="2" HorizontalAlignment="Left" Height="28" Margin="290,546,0,0" VerticalAlignment="Top" Width="274">
+            <Button Content="Open" Command="ApplicationCommands.Open"/>
+            <Button Content="Save" Command="ApplicationCommands.Save" />
+            <Button Content="Add Custom" Command="{x:Static local:MainWindow.Custom}"/>
+            <Button Content="Remove" Command="ApplicationCommands.Delete"/>
+
+        </ToolBar>
     </Grid>
 
 </Window>

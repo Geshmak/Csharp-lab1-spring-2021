@@ -23,14 +23,11 @@ namespace Lab1V4Kabanov
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private void OnCollectionChange(object sender, NotifyCollectionChangedEventArgs args)
-        //{
-        //    DataContext = null;
-        //    DataContext = V4MC;
-        //    //MessageBox.Show(DataContext.ToString());
-        //}
 
+        public static RoutedCommand Custom = new RoutedCommand("AddCustom", typeof(MainWindow));
         private V4MainCollection V4MC;
+        private PropertyClass PC;
+
 
         private void FilterDataCollection(object a,FilterEventArgs b) => b.Accepted = b.Item is V4DataCollection;
         private void FilterDataOnGrid(object a, FilterEventArgs b) => b.Accepted = b.Item is V4DataOnGrid;
@@ -40,11 +37,17 @@ namespace Lab1V4Kabanov
         public MainWindow()
         {
             InitializeComponent();
+            V4MC  = new V4MainCollection();
+            PC = new PropertyClass(ref V4MC);
+
             DataContext = V4MC;
+            Test.DataContext = PC;
+            
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //MessageBox.Show("loaded");
+            //DataContext = V4MC;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -52,16 +55,7 @@ namespace Lab1V4Kabanov
             if (ISaved())
                 MessageBox.Show("closed");
         }
-        //private void ChangeV4MC(V4MainCollection subj,bool fl=false)
-        //{
-        //    if (V4MC != null)
-        //        V4MC.CollectionChanged -= OnCollectionChange;
-        //    subj.CollectionChanged += OnCollectionChange;
-        //    V4MC = subj;
-        //    if (fl)
-        //        V4MC.IfChangedCollection = true;
-        //    OnCollectionChange(this, null);             
-        //}
+        
         private bool ISaved()
         {
             if (V4MC == null)
@@ -98,18 +92,16 @@ namespace Lab1V4Kabanov
         {
             if (ISaved())
             {
-                //            ChangeV4MC(new V4MainCollection());
+                
                 V4MC = new V4MainCollection();
+                PC = new PropertyClass(ref V4MC);
                 DataContext = V4MC;
-                //V4MC = new V4MainCollection();
-                //V4MC.IfChangedCollection = true;
+                Test.DataContext = PC;
             }
-                /*V4MC.AddDefaults();
-            ListBox.ItemsSource = null;
-            ListBox.ItemsSource = V4MC.list;*/
+               
         }
 
-        private void COpen(object sender, RoutedEventArgs e)
+        /*private void COpen(object sender, RoutedEventArgs e)
         {
             if (ISaved())
             {
@@ -118,9 +110,9 @@ namespace Lab1V4Kabanov
                     Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
                     if (dlg.ShowDialog() == true)
                     {
-                        //            ChangeV4MC(new V4MainCollection());
+                        
                         V4MC.Load(dlg.FileName);
-                        //            ChangeV4MC(V4MC);
+                        
 
                     }
                 }
@@ -130,8 +122,8 @@ namespace Lab1V4Kabanov
                 }
             }
                 
-        }
-        private void CSave(object sender, RoutedEventArgs e)
+        }*/
+        /*private void CSave(object sender, RoutedEventArgs e)
         {
             if (V4MC != null)
             {
@@ -154,7 +146,7 @@ namespace Lab1V4Kabanov
             }
             else
                 MessageBox.Show("Нет объекта");
-        }
+        }*/
 
         private void CAddDefaults(object sender, RoutedEventArgs e)
         {
@@ -165,6 +157,8 @@ namespace Lab1V4Kabanov
                 try
                 {
                     V4MC.AddDefaults();
+                   
+                    
                 }
                 catch (Exception ex)
                 {
@@ -181,6 +175,7 @@ namespace Lab1V4Kabanov
                 try
                 {
                     V4MC.AddExtrColl();
+                    
                 }
                 catch (Exception ex)
                 {
@@ -200,6 +195,7 @@ namespace Lab1V4Kabanov
                 {   
  
                     V4MC.AddExtrGrid();
+                   
                 }
                 catch (Exception ex)
                 {
@@ -223,6 +219,7 @@ namespace Lab1V4Kabanov
                         V4DataOnGrid V4MCF = new V4DataOnGrid(dlg.FileName);
                         V4MC.Add(V4MCF);
                         
+
                     }
                     catch (Exception ex)
                     {
@@ -232,7 +229,7 @@ namespace Lab1V4Kabanov
             }
         }
 
-        private void CRemove(object sender, RoutedEventArgs e)
+        /*private void CRemove(object sender, RoutedEventArgs e)
         {
             if (ListBox.SelectedItem != null)
             {
@@ -240,7 +237,7 @@ namespace Lab1V4Kabanov
                 {
                     V4Data Selected = (V4Data)ListBox.SelectedItem;
                     V4MC.Remove(Selected.CInfo, Selected.CFrequency);
-                    //            ChangeV4MC(V4MC, true);
+                    
 
                 }
                 catch (Exception ex)
@@ -249,7 +246,7 @@ namespace Lab1V4Kabanov
                 }
                 
             }       
-        }
+        }*/
 
         private void Window_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -261,6 +258,94 @@ namespace Lab1V4Kabanov
             MessageBox.Show(V4MC.MaxMagnitude.ToString());
         }
 
+        private void AddCustomV4DCClick(object sender, RoutedEventArgs e)
+        {
+            //DataContext = V4MC;
+            //DataContext = PC;
+        }
+        private void OpenCommandHandler(object sender,ExecutedRoutedEventArgs e)
+        {
+            if (ISaved())
+            {
+                try
+                {
+                    Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+                    if (dlg.ShowDialog() == true)
+                    {
+
+                        V4MC.Load(dlg.FileName);
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void SaveCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (V4MC != null)
+            {
+                try
+                {
+                    SaveFileDialog dlg = new SaveFileDialog();
+
+                    if (dlg.ShowDialog() == true)
+                    {
+                        V4MC.Save(dlg.FileName);
+
+                    }
+                    else
+                        MessageBox.Show("Данные не были сохранены");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else
+                MessageBox.Show("Нет объекта");
+        }
+        private void CanSaveCommandHandler(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (V4MC != null) && (V4MC.IfChangedCollection);
+        }
+        private void DeleteCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (ListBox.SelectedItem != null)
+            {
+                try
+                {
+                    V4Data Selected = (V4Data)ListBox.SelectedItem;
+                    V4MC.Remove(Selected.CInfo, Selected.CFrequency);
+
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+            }
+        }
+        private void CanDeleteCommandHandler(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = ListBox.SelectedItem != null;
+        }
+        private void CanCustomCommandHandler(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !(Validation.GetHasError(TBItem) || Validation.GetHasError(TBFreq) || Validation.GetHasError(TBInfo) || Validation.GetHasError(TBMinV) || Validation.GetHasError(TBMaxV));
+        }
+
+        private void CustomCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        {
+            PC.AddV4DC();
+        }
+
+        
 
 
         /*private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
