@@ -54,7 +54,7 @@ namespace ClassLibrary1
         }
         public class Enum : IEnumerator<DataItem>
         {
-            private int x = 0;
+            private int x = -1;
             private Dictionary<Vector2, Complex> dict;
             public Enum(Dictionary<Vector2, Complex> d)
             {
@@ -78,8 +78,8 @@ namespace ClassLibrary1
             }
             public bool MoveNext()
             {
-                x += 1;
-                return x < dict.Count;
+                
+                return (++x < dict.Count);
             }
         }
         public Dictionary<System.Numerics.Vector2, System.Numerics.Complex> Dict { set; get; }
@@ -96,7 +96,7 @@ namespace ClassLibrary1
             double comp;
             Vector2 Coordinate;
             Complex Value;
-            for (int count = 0; count < nItems-1; count++)
+            for (int count = 0; count < nItems; count++)
             {
                 real = rand.NextDouble() * (maxValue - minValue) + minValue;
                 comp = rand.NextDouble() * (maxValue - minValue) + minValue;
@@ -106,13 +106,13 @@ namespace ClassLibrary1
                 Value = new Complex(real, comp);
                 Dict.Add(Coordinate, Value);
             }
-            real = rand.NextDouble() * (maxValue - minValue) + minValue;
+            /*real = rand.NextDouble() * (maxValue - minValue) + minValue;
             comp = rand.NextDouble() * (maxValue - minValue) + minValue;
             x = 0.5;
             y = 0.5;
             Coordinate = new Vector2((float)x, (float)y);
             Value = new Complex(real, comp);
-            Dict.Add(Coordinate, Value);
+            Dict.Add(Coordinate, Value);*/
         }
         public override Complex[] NearMax(float eps)
         {
